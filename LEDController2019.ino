@@ -55,9 +55,9 @@ void setup() {
   pinMode(5, INPUT_PULLUP);
 }
 
-//0;SOLID;0xff00ff
-//0;CHASE;50;1000;500;0xff0000;0x0000ff
-//0;WAVE;0xff0000;0x0000ff;100;200
+//L0;SOLID;0xff00ff
+//L0;CHASE;50;1000;500;0xff0000;0x0000ff
+//L0;WAVE;0xff0000;0x0000ff;100;200
 void loop() {
   if (Serial.available() > 0) {
     delay(2);  //delay to allow buffer to fill 
@@ -90,6 +90,7 @@ void loop() {
       
     }
   }
+  
   ledController.update();
   
   fps++;

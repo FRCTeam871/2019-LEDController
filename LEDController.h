@@ -10,7 +10,6 @@ class LEDController {
         LEDStrip* _strips[MAX_STRIPS];
         
         void init();
-        void addStrip(int numPixels, int pin);
         void addStrip(LEDStrip* str);
         void update();
         void setMode(int i, LEDStripMode* mode);

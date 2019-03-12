@@ -51,33 +51,14 @@ void LEDController::init(){
 
 void LEDController::addStrip(LEDStrip* str){
   for(int i = 0; i < str->_strip.numPixels(); i++){
-    str->_strip.setPixelColor(i, 0x004444);
+    str->_strip.setPixelColor(i, 0x000000);
   }
   str->_strip.show();
-  Serial.println("aaa");
   //lstr._strip.show();
   _strips[_numStrips] = str;
   _numStrips++;
   str->setMode(&mChase);
   str->setParams(5, (uint32_t)100, (uint32_t)1000, (uint32_t)500, 0xff0000, 0x0000ff);
-
-}
-
-void LEDController::addStrip(int numPixels, int pin){
-  Adafruit_NeoPixel str = Adafruit_NeoPixel(numPixels, pin, NEO_GRB + NEO_KHZ800);
-  str.begin();
-  
-  LEDStrip lstr(str);
-  for(int i = 0; i < str.numPixels(); i++){
-    str.setPixelColor(i, 0x000044);
-  }
-  str.show();
-  Serial.println("aaa");
-  //lstr._strip.show();
-  //_strips[_numStrips] = &lstr;
-  //_numStrips++;
-  //lstr.setMode(&mChase);
-  //lstr.setParams(5, (uint32_t)100, (uint32_t)1000, (uint32_t)500, 0xff0000, 0x0000ff);
 
 }
 
