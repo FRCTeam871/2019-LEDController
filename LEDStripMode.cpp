@@ -101,6 +101,7 @@ void LEDStripModeChase::render(LEDStrip* strip) {
   uint32_t c2 = params[4];
 
   for(int i = 0; i < strip->_strip.numPixels(); i++) {
+//    Serial.println(i);
     if((millis() + (i*params[0])) % params[1] >= params[2]){
       strip->set(i, c1);
     }else{

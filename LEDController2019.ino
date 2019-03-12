@@ -33,6 +33,9 @@ int fps = 0;
 bool readFirstByte = false;
 bool destForLED = false;
 
+Adafruit_NeoPixel astr = Adafruit_NeoPixel(8, 6, NEO_GRB + NEO_KHZ800);
+LEDStrip lstr(astr);
+
 void setup() {
   Serial.begin(9600);
   Serial.println("LEDController");
@@ -42,10 +45,12 @@ void setup() {
   
   Serial.println("initialize");
   Serial.print("nStrips = ");
+
+  astr.begin();
+  
   ledController.init();
-  ledController.addStrip(15, 6);
-  ledController.addStrip(8, 7);
-  Serial.print(ledController._numStrips);
+  ledController.addStrip(&lstr);
+  Serial.println(ledController._numStrips);
   
   pinMode(5, INPUT_PULLUP);
 }
@@ -72,6 +77,7 @@ void loop() {
         readFirstByte = false;
         break;
       }else if(!readFirstByte){
+        Serial.println(c);
         if(c == 'L') { // if the message starts with 'L', it will be destined for the LEDController
           destForLED = true;
         }
@@ -91,6 +97,8 @@ void loop() {
     lastFPS = millis();
     Serial.print("UPS = ");
     Serial.println(fps);
+    Serial.print("freeRam() = ");
+    Serial.println(freeRam());
     fps = 0;
   }
   
