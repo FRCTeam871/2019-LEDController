@@ -1,15 +1,15 @@
 ///////////////////////////////////
 //         LEDController         //
-//         v 1.0.0-alpha         //
+//         v 2.0.0-alpha         //
 //                               //
 // by David Mahany, FRC Team 871 //
 //         git.io/fhxV9          //
 ///////////////////////////////////
 
 // LEDController2019.ino
-// Contains most of the logic. 
+// Contains most of the logic.
 
-#define VERSION "1.0.0-alpha"
+#define VERSION "2.0.0-alpha"
 
 #include <Adafruit_NeoPixel.h>
 #ifdef __AVR__
@@ -21,8 +21,6 @@
 #include "LEDController.h"
 
 LEDController ledController;
-
-bool wasPlaced = false;
 
 char readString[200];
 int readIndex = 0;
@@ -52,7 +50,6 @@ void setup() {
   ledController.addStrip(&lstr);
   Serial.println(ledController._numStrips);
   
-  pinMode(5, INPUT_PULLUP);
 }
 
 //L0;SOLID;0xff00ff
