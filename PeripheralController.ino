@@ -1,13 +1,13 @@
 ///////////////////////////////////
-//         LEDController         //
+//      PeripheralController     //
 //         v 2.0.0-alpha         //
 //                               //
 // by David Mahany, FRC Team 871 //
 //         git.io/fhxV9          //
 ///////////////////////////////////
 
-// LEDController2019.ino
-// Contains most of the logic.
+// PeripheralController.ino
+// Contains setup for the different peripheral components.
 
 #define VERSION "2.0.0-alpha"
 
@@ -36,7 +36,7 @@ LEDStrip lstr(astr);
 
 void setup() {
   Serial.begin(9600);
-  Serial.println("LEDController");
+  Serial.println("PeripheralController");
   Serial.println("Version " VERSION);
   Serial.println("Source at git.io/fhxV9");
   Serial.println("");
