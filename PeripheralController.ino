@@ -11,12 +11,18 @@
 
 #define VERSION "2.0.0-alpha"
 
+
+#include "LEDStrip.h"
+
+#if USE_OCTOWS2811
+#include <OctoWS2811.h>
+#else
 #include <Adafruit_NeoPixel.h>
+#endif
 #ifdef __AVR__
 #include <avr/power.h>
 #endif
 
-#include "LEDStrip.h"
 #include "LEDStripMode.h"
 #include "LEDController.h"
 
@@ -31,7 +37,21 @@ int fps = 0;
 bool readFirstByte = false;
 bool destForLED = false;
 
+
+#if USE_OCTOWS2811
+const int ledsPerStrip = 60;
+
+DMAMEM int displayMemory[ledsPerStrip*6];
+int drawingMemory[ledsPerStrip*6];
+
+const int config = WS2811_GRB | WS2811_800kHz;
+
+OctoWS2811 astr = OctoWS2811(ledsPerStrip, displayMemory, drawingMemory, config);
+#else
 Adafruit_NeoPixel astr = Adafruit_NeoPixel(8, 6, NEO_GRB + NEO_KHZ800);
+#endif
+
+
 LEDStrip lstr(astr);
 
 void setup() {
@@ -104,8 +124,12 @@ void loop() {
 }
 
 int freeRam() {
+  #if USE_OCTOWS2811
+  return 0;
+  #else
   extern int __heap_start, *__brkval;
   int v;
   return (int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval);
+  #endif
 }
 

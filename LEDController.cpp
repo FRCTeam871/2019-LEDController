@@ -50,9 +50,6 @@ void LEDController::init(){
 }
 
 void LEDController::addStrip(LEDStrip* str){
-  for(int i = 0; i < str->_strip.numPixels(); i++){
-    str->_strip.setPixelColor(i, 0x000000);
-  }
   str->_strip.show();
   //lstr._strip.show();
   _strips[_numStrips] = str;
