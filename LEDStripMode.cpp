@@ -24,7 +24,7 @@ void LEDStripModeChaseTest::render(LEDStrip* strip) {
   uint32_t c1 = strip->Color(100, 0, 0);
   uint32_t c2 = strip->Color(0, 100, 0);
 
-  for(int i = 0; i < strip->_strip.numPixels(); i++) {
+  for(int i = 0; i < strip->numPixels(); i++) {
     if((millis() + (i*20)) % 500 >= 250){
       strip->set(i, c1);
     }else{
@@ -53,7 +53,7 @@ void LEDStripModeBounce::render(LEDStrip* strip) {
   long dt = now - lastUpdate;
   uint32_t c0 = strip->Color(0, 0, 0);
   
-  int pixels = strip->_strip.numPixels();
+  int pixels = strip->numPixels();
   
   //Serial.println(bounce_ball[0][0]);
   
@@ -100,7 +100,7 @@ void LEDStripModeChase::render(LEDStrip* strip) {
   uint32_t c1 = params[3];
   uint32_t c2 = params[4];
 
-  for(int i = 0; i < strip->_strip.numPixels(); i++) {
+  for(int i = 0; i < strip->numPixels(); i++) {
 //    Serial.println(i);
     if((millis() + (i*params[0])) % params[1] >= params[2]){
       strip->set(i, c1);
@@ -116,9 +116,9 @@ void LEDStripModeFPSTest::render(LEDStrip* strip) {
   uint32_t c1 = 0xff0000;
   uint32_t c2 = 0x000000;
 
-  fpsPos = (fpsPos + 1) % strip->_strip.numPixels();
+  fpsPos = (fpsPos + 1) % strip->numPixels();
 
-  for(int i = 0; i < strip->_strip.numPixels(); i++) {
+  for(int i = 0; i < strip->numPixels(); i++) {
     if(i == fpsPos){
       strip->set(i, c1);
     }else{
@@ -134,9 +134,9 @@ void LEDStripModeWave::render(LEDStrip* strip) {
   uint32_t hotPink = params[1];
   int height = params[2];
 
-  for(int i = 0; i < strip->_strip.numPixels(); i++){
+  for(int i = 0; i < strip->numPixels(); i++){
     strip->set(i, lightBlue);
-    if(i+1 < ((sin((2 * PI * millis())/(float)params[3]) + 1) / 2) * (strip->_strip.numPixels() + 1) * (height / 100.0)){
+    if(i+1 < ((sin((2 * PI * millis())/(float)params[3]) + 1) / 2) * (strip->numPixels() + 1) * (height / 100.0)){
       strip->set(i, lightBlue);
     } else {
       strip->set(i, hotPink);
