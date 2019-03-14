@@ -7,6 +7,16 @@
 
 LEDStrip::LEDStrip(Adafruit_NeoPixel strip){
   _strip = strip;
+  _vnum = strip.numPixels();
+  _vofs = 0;
+  brightness = 0.5;
+  reverse = false;
+}
+
+LEDStrip::LEDStrip(Adafruit_NeoPixel strip, int vnum, int vofs){
+  _strip = strip;
+  _vnum = vnum;
+  _vofs = vofs;
   brightness = 0.5;
   reverse = false;
 }
@@ -49,14 +59,20 @@ void LEDStrip::update(){
 }
 
 void LEDStrip::setAll(uint32_t color){
-  for(uint16_t i = 0; i < _strip.numPixels(); i++) {
+  for(uint16_t i = 0; i < numPixels(); i++) {
     set(i, color);
   }
 }
 
 void LEDStrip::set(int i, uint32_t c){
-  if(reverse) i = _strip.numPixels() - i - 1;
-  _strip.setPixelColor(i, lerp(0x000000, c, brightness));
+  if(i < 0) i = 0;
+  if(i >= _vnum) i = _vnum -1;
+  if(reverse) i = numPixels() - i - 1;
+  _strip.setPixelColor(i + _vofs, lerp(0x000000, c, brightness));
+}
+
+int LEDStrip::numPixels(){
+  return _vnum;
 }
 
 uint32_t LEDStrip::Color(int r, int g, int b){

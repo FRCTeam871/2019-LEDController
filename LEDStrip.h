@@ -14,11 +14,14 @@ class LEDStrip {
     uint32_t params[10];
     float brightness;
     bool reverse;
+    int _vnum;
+    int _vofs;
     
     void setParams(uint32_t params[]);
     void setParams(int num, ...);
     
     LEDStrip(Adafruit_NeoPixel strip);
+    LEDStrip(Adafruit_NeoPixel strip, int vnum, int vofs);
     
     void setMode(LEDStripMode* mode);
 
@@ -26,6 +29,8 @@ class LEDStrip {
 
     void setAll(uint32_t color);
     void set(int i, uint32_t c);
+    
+    int numPixels();
 
     uint32_t Color(int r, int g, int b);
 
