@@ -12,6 +12,10 @@ void LEDStripMode::setParams(uint32_t params[]){
   }
 }
 
+uint32_t LEDStripMode::Color(int r, int g, int b){
+  return ((uint32_t)r << 16) | ((uint32_t)g <<  8) | b;
+}
+
 void LEDStripModeOff::render(LEDStrip* strip) {
   strip->setAll(strip->Color(0, 0, 0));
 }
@@ -154,4 +158,73 @@ void LEDStripModeFade::render(LEDStrip* strip) {
     strip->set(i, strip->lerp(c1, c2, ((sin((2 * PI * (millis() + params[3]*i))/(float)params[2]) + 1) / 2)));
   }
 }
+
+#define FIRE_SAMPLES 50
+long fire_lastTick = 0;
+int fire_heat[FIRE_SAMPLES];
+uint32_t fire_color[FIRE_SAMPLES];
+void LEDStripModeFire::render(LEDStrip* strip) {
+
+  //Serial.println("render fire");
+  if(millis() - fire_lastTick > 50) tickFire(80, 60);
+  for(int i = 0; i < strip->numPixels(); i++){
+    strip->set(i, fire_color[(int)(i / (float)strip->numPixels() * FIRE_SAMPLES)]);
+  }
+}
+
+void LEDStripModeFire::tickFire(int Cooling, int Sparking) {
+ 
+  fire_lastTick = millis();
+ 
+  Serial.println("tickFire");
+  int cooldown;
+  
+  // Step 1.  Cool down every cell a little
+  for( int i = 0; i < FIRE_SAMPLES; i++) {
+    cooldown = random(0, ((Cooling * 10) / FIRE_SAMPLES) + 2);
+    
+    if(cooldown>fire_heat[i]) {
+      fire_heat[i]=0;
+    } else {
+      fire_heat[i]=fire_heat[i]-cooldown;
+    }
+  }
+  
+  // Step 2.  Heat from each cell drifts 'up' and diffuses a little
+  for( int k= FIRE_SAMPLES - 1; k >= 2; k--) {
+    fire_heat[k] = (fire_heat[k - 1] + fire_heat[k - 2] + fire_heat[k - 2]) / 3;
+  }
+    
+  // Step 3.  Randomly ignite new 'sparks' near the bottom
+  if( random(255) < Sparking ) {
+    int y = random(7);
+    fire_heat[y] = fire_heat[y] + random(160,255);
+    //heat[y] = random(160,255);
+  }
+
+  // Step 4.  Convert heat to LED colors
+  for( int j = 0; j < FIRE_SAMPLES; j++) {
+    setPixelHeatColor(j, fire_heat[j] );
+  }
+}
+
+void LEDStripModeFire::setPixelHeatColor (int Pixel, int temperature) {
+  // Scale 'heat' down from 0-255 to 0-191
+  int t192 = round((temperature/255.0)*191);
+ 
+  // calculate ramp up from
+  int heatramp = t192 & 0x3F; // 0..63
+  heatramp <<= 2; // scale up to 0..252
+ 
+  // figure out which third of the spectrum we're in:
+  if( t192 > 0x80) {                     // hottest
+    fire_color[Pixel] = Color(255, 255, heatramp);
+  } else if( t192 > 0x40 ) {             // middle
+    fire_color[Pixel] = Color(255, heatramp, 0);
+  } else {                               // coolest
+    fire_color[Pixel] = Color(heatramp, 0, 0);
+  }
+}
+
+
 
