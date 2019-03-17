@@ -239,8 +239,20 @@ void LEDStripModeRainbowChase::render(LEDStrip* strip) {
   }
 }
 
+long binary_lastTick = 0;
+uint32_t binary_count = 0;
 void LEDStripModeBinary::render(LEDStrip* strip) {
+  uint32_t num = params[0];
+  if(num == UINT32_MAX){
+    num = binary_count;
+    
+    if(millis() - binary_lastTick > params[3]) {
+      binary_count++;
+      binary_lastTick = millis();
+    }
+  }
+  
   for(int i = 0; i < strip->numPixels(); i++){
-    strip->set(i, (int)(params[0] / pow(2,i)) % 2 == 1 ? params[1] : params[2]);
+    strip->set(i, (int)(num / pow(2,i)) % 2 == 1 ? params[1] : params[2]);
   }
 }
