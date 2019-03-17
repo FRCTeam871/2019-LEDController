@@ -239,3 +239,8 @@ void LEDStripModeRainbowChase::render(LEDStrip* strip) {
   }
 }
 
+void LEDStripModeBinary::render(LEDStrip* strip) {
+  for(int i = 0; i < strip->numPixels(); i++){
+    strip->set(i, (int)(params[0] / pow(2,i)) % 2 == 1 ? params[1] : params[2]);
+  }
+}

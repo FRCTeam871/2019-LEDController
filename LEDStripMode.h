@@ -74,3 +74,8 @@ class LEDStripModeRainbowChase : public LEDStripMode {
   public:
     virtual void render(LEDStrip* strip);
 };
+
+class LEDStripModeBinary : public LEDStripMode {
+  public:
+    virtual void render(LEDStrip* strip);
+};
