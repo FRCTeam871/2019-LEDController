@@ -229,5 +229,7 @@ void LEDStripModeFire::setPixelHeatColor (int Pixel, uint8_t temperature) {
   }
 }
 
-
+void LEDStripModeRainbow::render(LEDStrip* strip) {
+  strip->setAll(strip->HueRotate(255, 0, 0, (int)(millis() / (double)params[0] * 360) % 360));
+}
 
