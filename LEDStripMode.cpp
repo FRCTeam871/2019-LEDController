@@ -233,3 +233,9 @@ void LEDStripModeRainbow::render(LEDStrip* strip) {
   strip->setAll(strip->HueRotate(255, 0, 0, (int)(millis() / (double)params[0] * 360) % 360));
 }
 
+void LEDStripModeRainbowChase::render(LEDStrip* strip) {
+  for(int i = 0; i < strip->numPixels(); i++){
+    strip->set(i, strip->HueRotate(255, 0, 0, (int)((millis() + params[1] * i) / (double)params[0] * 360) % 360));
+  }
+}
+

@@ -16,9 +16,10 @@ LEDStripModeFade mFade;
 LEDStripModeFire mFire;
 LEDStripModeFPSTest mFPS;
 LEDStripModeRainbow mRainbow;
+LEDStripModeRainbowChase mRainbowChase;
 
-LEDStripMode *modes[] = {&mOff, &mSolid, &mChase, &mBounce, &mWave, &mFade, &mFire, &mFPS, &mRainbow};
-char *keys[] = {"OFF", "SOLID", "CHASE", "BOUNCE", "WAVE", "FADE", "FIRE", "FPS", "RAINBOW"};
+LEDStripMode *modes[] = {&mOff, &mSolid, &mChase, &mBounce, &mWave, &mFade, &mFire, &mFPS, &mRainbow, &mRainbowChase};
+char *keys[] = {"OFF", "SOLID", "CHASE", "BOUNCE", "WAVE", "FADE", "FIRE", "FPS", "RAINBOW", "RAINBOWCHASE"};
 
 int count_chars(const char* string, char ch){
     int count = 0;

@@ -69,3 +69,8 @@ class LEDStripModeRainbow : public LEDStripMode {
   public:
     virtual void render(LEDStrip* strip);
 };
+
+class LEDStripModeRainbowChase : public LEDStripMode {
+  public:
+    virtual void render(LEDStrip* strip);
+};
