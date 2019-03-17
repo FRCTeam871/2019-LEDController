@@ -168,7 +168,7 @@ void LEDStripModeFire::render(LEDStrip* strip) {
   //Serial.println("render fire");
   if(millis() - fire_lastTick > 0) tickFire(55, 200);
   for(int i = 0; i < strip->numPixels(); i++){
-    strip->set(i, fire_color[(int)(i / (float)strip->numPixels() * FIRE_SAMPLES)]);
+    strip->set(i, strip->HueRotate(fire_color[(int)(i / (float)strip->numPixels() * FIRE_SAMPLES)], params[0]));
   }
 }
 
