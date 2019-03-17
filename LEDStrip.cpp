@@ -92,6 +92,10 @@ uint32_t LEDStrip::HueRotate(int r, int g, int b, int h){
   double hsl[3];
   conv.rgbToHsl(r, g, b, hsl);
   
+  if(h == RAINBOW_CONST){
+    h = (int)(millis() / 10.0) % 360;
+  }
+  
   hsl[0] = hsl[0] + h / 360.0;
   while(hsl[0] > 1.0) hsl[0]--;
   

@@ -133,7 +133,9 @@ void LEDController::handleInput(char readString[]){
       }
     }
     if(i > 1) {
-      if(str[0] == '0' && str[1] == 'x'){
+      if(str[0] == 'R'){
+        params[i-2] = RAINBOW_CONST;
+      }else if(str[0] == '0' && str[1] == 'x'){
         params[i-2] = strtoul(str, NULL, 16);
       }else{
         params[i-2] = strtoul(str, NULL, 10);

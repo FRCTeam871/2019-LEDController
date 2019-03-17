@@ -31,9 +31,8 @@ int fps = 0;
 bool readFirstByte = false;
 bool destForLED = false;
 
-Adafruit_NeoPixel astr = Adafruit_NeoPixel(8, 6, NEO_GRB + NEO_KHZ800);
-LEDStrip lstr(astr, 4, 0);
-LEDStrip lstr2(astr, 4, 4);
+Adafruit_NeoPixel astr = Adafruit_NeoPixel(15, 6, NEO_GRB + NEO_KHZ800);
+LEDStrip lstr(astr);
 
 void setup() {
   Serial.begin(9600);
@@ -49,7 +48,6 @@ void setup() {
   
   ledController.init();
   ledController.addStrip(&lstr);
-  ledController.addStrip(&lstr2);
   Serial.println(ledController._numStrips);
   
 }
