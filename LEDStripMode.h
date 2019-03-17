@@ -62,5 +62,5 @@ class LEDStripModeFire : public LEDStripMode {
   public:
     virtual void render(LEDStrip* strip);
     void tickFire(int Cooling, int Sparking);
-    void setPixelHeatColor(int Pixel, int temperature);
+    void setPixelHeatColor(int Pixel, uint8_t temperature);
 };

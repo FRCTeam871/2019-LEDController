@@ -159,14 +159,14 @@ void LEDStripModeFade::render(LEDStrip* strip) {
   }
 }
 
-#define FIRE_SAMPLES 50
+#define FIRE_SAMPLES 70
 long fire_lastTick = 0;
-int fire_heat[FIRE_SAMPLES];
+uint8_t fire_heat[FIRE_SAMPLES];
 uint32_t fire_color[FIRE_SAMPLES];
 void LEDStripModeFire::render(LEDStrip* strip) {
 
   //Serial.println("render fire");
-  if(millis() - fire_lastTick > 50) tickFire(80, 60);
+  if(millis() - fire_lastTick > 0) tickFire(55, 200);
   for(int i = 0; i < strip->numPixels(); i++){
     strip->set(i, fire_color[(int)(i / (float)strip->numPixels() * FIRE_SAMPLES)]);
   }
@@ -176,7 +176,7 @@ void LEDStripModeFire::tickFire(int Cooling, int Sparking) {
  
   fire_lastTick = millis();
  
-  Serial.println("tickFire");
+  //Serial.println("tickFire");
   int cooldown;
   
   // Step 1.  Cool down every cell a little
@@ -204,11 +204,14 @@ void LEDStripModeFire::tickFire(int Cooling, int Sparking) {
 
   // Step 4.  Convert heat to LED colors
   for( int j = 0; j < FIRE_SAMPLES; j++) {
+    //Serial.print((int)((fire_heat[j] / 255.0) * 9));
+    //Serial.print(" ");
     setPixelHeatColor(j, fire_heat[j] );
   }
+  //Serial.println();
 }
 
-void LEDStripModeFire::setPixelHeatColor (int Pixel, int temperature) {
+void LEDStripModeFire::setPixelHeatColor (int Pixel, uint8_t temperature) {
   // Scale 'heat' down from 0-255 to 0-191
   int t192 = round((temperature/255.0)*191);
  
@@ -216,13 +219,13 @@ void LEDStripModeFire::setPixelHeatColor (int Pixel, int temperature) {
   int heatramp = t192 & 0x3F; // 0..63
   heatramp <<= 2; // scale up to 0..252
  
-  // figure out which third of the spectrum we're in:
   if( t192 > 0x80) {                     // hottest
-    fire_color[Pixel] = Color(255, 255, heatramp);
+    if(heatramp > 50) heatramp = 50;
+    fire_color[Pixel] = Color(255, 200, 0);
   } else if( t192 > 0x40 ) {             // middle
-    fire_color[Pixel] = Color(255, heatramp, 0);
+    fire_color[Pixel] = Color(255, heatramp * 0.8, 0);
   } else {                               // coolest
-    fire_color[Pixel] = Color(heatramp, 0, 0);
+    fire_color[Pixel] = Color(heatramp, heatramp/20, 0);
   }
 }
 
