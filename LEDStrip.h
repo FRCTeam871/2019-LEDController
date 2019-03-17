@@ -3,6 +3,8 @@
 
 #include <Adafruit_NeoPixel.h>
 
+#define RAINBOW_CONST UINT32_MAX
+
 class LEDStripMode;
 
 class LEDStrip {
