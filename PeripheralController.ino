@@ -1,6 +1,6 @@
 ///////////////////////////////////
 //      PeripheralController     //
-//         v 2.0.0-alpha         //
+//         v 2.1.0-alpha         //
 //                               //
 // by David Mahany, FRC Team 871 //
 //         git.io/fhxV9          //
@@ -9,7 +9,7 @@
 // PeripheralController.ino
 // Contains setup for the different peripheral components.
 
-#define VERSION "2.0.0-alpha"
+#define VERSION "2.1.0-alpha"
 
 #include <Adafruit_NeoPixel.h>
 #ifdef __AVR__
@@ -31,9 +31,8 @@ int fps = 0;
 bool readFirstByte = false;
 bool destForLED = false;
 
-Adafruit_NeoPixel astr = Adafruit_NeoPixel(8, 6, NEO_GRB + NEO_KHZ800);
-LEDStrip lstr(astr, 4, 0);
-LEDStrip lstr2(astr, 4, 4);
+Adafruit_NeoPixel astr = Adafruit_NeoPixel(15, 6, NEO_GRB + NEO_KHZ800);
+LEDStrip lstr(astr);
 
 void setup() {
   Serial.begin(9600);
