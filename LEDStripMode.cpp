@@ -234,9 +234,13 @@ void LEDStripModeRainbow::render(LEDStrip* strip) {
 }
 
 void LEDStripModeRainbowChase::render(LEDStrip* strip) {
+  int h0 = (int)((long)((millis() + params[1] * 0) / (double)params[0] * 360) % 360);
   for(int i = 0; i < strip->numPixels(); i++){
-    strip->set(i, strip->HueRotate(255, 0, 0, (int)((millis() + params[1] * i) / (double)params[0] * 360) % 360));
+  int h = (int)((long)((millis() + params[1] * i) / (double)params[0] * 360) % 360);
+    strip->set(i, strip->HueRotate(255, 0, 0, h));
+    
   }
+  Serial.println(h0);
 }
 
 long binary_lastTick = 0;
