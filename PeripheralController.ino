@@ -48,7 +48,6 @@ void setup() {
   
   ledController.init();
   ledController.addStrip(&lstr);
-  ledController.addStrip(&lstr2);
   Serial.println(ledController._numStrips);
   
 }

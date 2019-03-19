@@ -12,6 +12,10 @@ void LEDStripMode::setParams(uint32_t params[]){
   }
 }
 
+uint32_t LEDStripMode::Color(int r, int g, int b){
+  return ((uint32_t)r << 16) | ((uint32_t)g <<  8) | b;
+}
+
 void LEDStripModeOff::render(LEDStrip* strip) {
   strip->setAll(strip->Color(0, 0, 0));
 }
@@ -155,3 +159,104 @@ void LEDStripModeFade::render(LEDStrip* strip) {
   }
 }
 
+#define FIRE_SAMPLES 70
+long fire_lastTick = 0;
+uint8_t fire_heat[FIRE_SAMPLES];
+uint32_t fire_color[FIRE_SAMPLES];
+void LEDStripModeFire::render(LEDStrip* strip) {
+
+  //Serial.println("render fire");
+  if(millis() - fire_lastTick > 0) tickFire(55, 200);
+  for(int i = 0; i < strip->numPixels(); i++){
+    strip->set(i, strip->HueRotate(fire_color[(int)(i / (float)strip->numPixels() * FIRE_SAMPLES)], params[0]));
+  }
+}
+
+void LEDStripModeFire::tickFire(int Cooling, int Sparking) {
+ 
+  fire_lastTick = millis();
+ 
+  //Serial.println("tickFire");
+  int cooldown;
+  
+  // Step 1.  Cool down every cell a little
+  for( int i = 0; i < FIRE_SAMPLES; i++) {
+    cooldown = random(0, ((Cooling * 10) / FIRE_SAMPLES) + 2);
+    
+    if(cooldown>fire_heat[i]) {
+      fire_heat[i]=0;
+    } else {
+      fire_heat[i]=fire_heat[i]-cooldown;
+    }
+  }
+  
+  // Step 2.  Heat from each cell drifts 'up' and diffuses a little
+  for( int k= FIRE_SAMPLES - 1; k >= 2; k--) {
+    fire_heat[k] = (fire_heat[k - 1] + fire_heat[k - 2] + fire_heat[k - 2]) / 3;
+  }
+    
+  // Step 3.  Randomly ignite new 'sparks' near the bottom
+  if( random(255) < Sparking ) {
+    int y = random(7);
+    fire_heat[y] = fire_heat[y] + random(160,255);
+    //heat[y] = random(160,255);
+  }
+
+  // Step 4.  Convert heat to LED colors
+  for( int j = 0; j < FIRE_SAMPLES; j++) {
+    //Serial.print((int)((fire_heat[j] / 255.0) * 9));
+    //Serial.print(" ");
+    setPixelHeatColor(j, fire_heat[j] );
+  }
+  //Serial.println();
+}
+
+void LEDStripModeFire::setPixelHeatColor (int Pixel, uint8_t temperature) {
+  // Scale 'heat' down from 0-255 to 0-191
+  int t192 = round((temperature/255.0)*191);
+ 
+  // calculate ramp up from
+  int heatramp = t192 & 0x3F; // 0..63
+  heatramp <<= 2; // scale up to 0..252
+ 
+  if( t192 > 0x80) {                     // hottest
+    if(heatramp > 50) heatramp = 50;
+    fire_color[Pixel] = Color(255, 200, 0);
+  } else if( t192 > 0x40 ) {             // middle
+    fire_color[Pixel] = Color(255, heatramp * 0.8, 0);
+  } else {                               // coolest
+    fire_color[Pixel] = Color(heatramp, heatramp/20, 0);
+  }
+}
+
+void LEDStripModeRainbow::render(LEDStrip* strip) {
+  strip->setAll(strip->HueRotate(255, 0, 0, (int)(millis() / (double)params[0] * 360) % 360));
+}
+
+void LEDStripModeRainbowChase::render(LEDStrip* strip) {
+  int h0 = (int)((long)((millis() + params[1] * 0) / (double)params[0] * 360) % 360);
+  for(int i = 0; i < strip->numPixels(); i++){
+  int h = (int)((long)((millis() + params[1] * i) / (double)params[0] * 360) % 360);
+    strip->set(i, strip->HueRotate(255, 0, 0, h));
+    
+  }
+  Serial.println(h0);
+}
+
+long binary_lastTick = 0;
+uint32_t binary_count = 0;
+void LEDStripModeBinary::render(LEDStrip* strip) {
+  uint32_t num = params[0];
+  if(num == UINT32_MAX){
+    num = binary_count;
+    
+    if(millis() - binary_lastTick > params[3]) {
+      binary_count++;
+      binary_lastTick = millis();
+    }
+  }
+  
+  for(int i = 0; i < strip->numPixels(); i++){
+    strip->set(i, (int)(num / pow(2,i)) % 2 == 1 ? params[1] : params[2]);
+  }
+}

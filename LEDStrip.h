@@ -3,6 +3,8 @@
 
 #include <Adafruit_NeoPixel.h>
 
+#define RAINBOW_CONST UINT32_MAX
+
 class LEDStripMode;
 
 class LEDStrip {
@@ -33,6 +35,8 @@ class LEDStrip {
     int numPixels();
 
     uint32_t Color(int r, int g, int b);
+    uint32_t HueRotate(int r, int g, int b, int h);
+    uint32_t HueRotate(uint32_t c, int h);
 
     Adafruit_NeoPixel _strip;
     
