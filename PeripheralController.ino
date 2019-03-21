@@ -1,6 +1,6 @@
 ///////////////////////////////////
 //      PeripheralController     //
-//         v 2.2.0-alpha         //
+//         v 2.3.0-alpha         //
 //                               //
 // by David Mahany, FRC Team 871 //
 //         git.io/fhxV9          //
@@ -9,7 +9,7 @@
 // PeripheralController.ino
 // Contains setup for the different peripheral components.
 
-#define VERSION "2.2.0-alpha"
+#define VERSION "2.3.0-alpha"
 
 
 #include "LEDStrip.h"
