@@ -26,6 +26,13 @@
 #include "LEDStripMode.h"
 #include "LEDController.h"
 
+#include <Audio.h>
+#include <Wire.h>
+#include <SPI.h>
+#include <SD.h>
+#include <SerialFlash.h>
+
+
 LEDController ledController;
 
 char readString[200];
@@ -36,6 +43,7 @@ int fps = 0;
 
 bool readFirstByte = false;
 bool destForLED = false;
+bool destForAudio = false;
 
 #if USE_OCTOWS2811
 const int ledsPerStrip = 60;
@@ -80,6 +88,8 @@ void setup() {
   ledController.addStrip(&lstr2);
   Serial.println(ledController._numStrips);
   
+  audioSetup();
+  
 }
 
 //L0;SOLID;0xff00ff
@@ -97,16 +107,21 @@ void loop() {
 
         if(destForLED){
           ledController.handleInput(readString);
+        }else if(destForAudio){
+          audioHandleInput(readString);
         }
         
         readIndex = 0;
         destForLED = false;
+        destForAudio = false;
         readFirstByte = false;
         break;
       }else if(!readFirstByte){
         Serial.println(c);
         if(c == 'L') { // if the message starts with 'L', it will be destined for the LEDController
           destForLED = true;
+        }else if(c == 'S') { // if the message starts with 'L', it will be destined for the LEDController
+          destForAudio = true;
         }
         readFirstByte = true;
       }else{
