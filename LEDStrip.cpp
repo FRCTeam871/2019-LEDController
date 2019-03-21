@@ -121,4 +121,3 @@ uint32_t LEDStrip::lerp(uint32_t c1, uint32_t c2, float t){
 
   return ((uint32_t)r << 16) | ((uint32_t)g <<  8) | b;
 }
-

@@ -153,5 +153,3 @@ void LEDController::handleInput(char readString[]){
     }
   }
 }
-
-

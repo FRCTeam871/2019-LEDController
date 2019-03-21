@@ -1,7 +1,7 @@
 // LEDStrip.h
 // Headers for LEDStrip
 
-#define USE_OCTOWS2811 0
+#define USE_OCTOWS2811 1
 
 #if USE_OCTOWS2811
 #include <OctoWS2811.h>
@@ -55,4 +55,3 @@ class LEDStrip {
     
     uint32_t lerp(uint32_t c1, uint32_t c2, float t);
 };
-

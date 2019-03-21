@@ -47,12 +47,18 @@ int drawingMemory[ledsPerStrip*6];
 const int config = WS2811_GRB | WS2811_800kHz;
 
 OctoWS2811 astr = OctoWS2811(ledsPerStrip, displayMemory, drawingMemory, config);
+
+
+LEDStrip lstr(astr, 15, ledsPerStrip * 0);
+LEDStrip lstr2(astr, 12, ledsPerStrip * 3);
 #else
-Adafruit_NeoPixel astr = Adafruit_NeoPixel(8, 6, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel astr = Adafruit_NeoPixel(15, 6, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel astr = Adafruit_NeoPixel(12, 7, NEO_GRB + NEO_KHZ800);
+
+LEDStrip lstr(astr);
+LEDStrip lstr2(astr);
 #endif
 
-LEDStrip lstr(astr, 4, 0);
-LEDStrip lstr2(astr, 4, 4);
 
 void setup() {
   Serial.begin(9600);
@@ -63,7 +69,12 @@ void setup() {
   
   Serial.println("initialize");
   Serial.print("nStrips = ");
-
+  
+  #if USE_OCTOWS2811
+  //TODO: why does it need this? (I think if you instantiate more than one it uses the params from the newest?)
+  astr = OctoWS2811(ledsPerStrip, displayMemory, drawingMemory, config);
+  #endif
+  
   astr.begin();
   
   ledController.init();
@@ -133,4 +144,3 @@ int freeRam() {
   return (int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval);
   #endif
 }
-
