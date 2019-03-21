@@ -9,6 +9,7 @@ class LEDStripMode {
     
     virtual void render(LEDStrip* strip) = 0;
     void setParams(uint32_t params[]);
+    uint32_t Color(int r, int g, int b);
     //virtual ~LEDStrip*Mode(){}
 };
 
@@ -53,6 +54,28 @@ class LEDStripModeWave : public LEDStripMode {
 };
 
 class LEDStripModeFade : public LEDStripMode {
+  public:
+    virtual void render(LEDStrip* strip);
+};
+
+class LEDStripModeFire : public LEDStripMode {
+  public:
+    virtual void render(LEDStrip* strip);
+    void tickFire(int Cooling, int Sparking);
+    void setPixelHeatColor(int Pixel, uint8_t temperature);
+};
+
+class LEDStripModeRainbow : public LEDStripMode {
+  public:
+    virtual void render(LEDStrip* strip);
+};
+
+class LEDStripModeRainbowChase : public LEDStripMode {
+  public:
+    virtual void render(LEDStrip* strip);
+};
+
+class LEDStripModeBinary : public LEDStripMode {
   public:
     virtual void render(LEDStrip* strip);
 };

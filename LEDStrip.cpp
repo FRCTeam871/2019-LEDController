@@ -2,8 +2,12 @@
 // Implementation of LEDStrip.h
 // Basically wraps an Adafruit_NeoPixel or OctoWS2811 (depending on is USE_OCTOWS2811 is set) and adds some functionality
 
+#include "RGBConverter.h"
+
 #include "LEDStripMode.h"
 #include "LEDStrip.h"
+
+RGBConverter conv;
 
 #if USE_OCTOWS2811
 LEDStrip::LEDStrip(OctoWS2811 strip){
@@ -20,6 +24,7 @@ LEDStrip::LEDStrip(OctoWS2811 strip, int vnum, int vofs){
   reverse = false;
 }
 #else
+
 LEDStrip::LEDStrip(Adafruit_NeoPixel strip){
   _strip = strip;
   _vnum = strip.numPixels();
@@ -104,6 +109,28 @@ uint32_t LEDStrip::Color(int r, int g, int b){
   #else
   return _strip.Color(r, g, b);
   #endif
+}
+
+uint32_t LEDStrip::HueRotate(uint32_t c, int h){
+  return HueRotate((c>>16)&0xFF, (c>>8)&0xFF, (c)&0xFF, h);
+}
+
+uint32_t LEDStrip::HueRotate(int r, int g, int b, int h){
+
+  double hsl[3];
+  conv.rgbToHsl(r, g, b, hsl);
+  
+  if(h == RAINBOW_CONST){
+    h = (int)(millis() / 10.0) % 360;
+  }
+  
+  hsl[0] = hsl[0] + h / 360.0;
+  while(hsl[0] > 1.0) hsl[0]--;
+  
+  byte rgb[3];
+  conv.hslToRgb(hsl[0], hsl[1], hsl[2], rgb);
+  
+  return Color(rgb[0], rgb[1], rgb[2]);
 }
 
 uint32_t LEDStrip::lerp(uint32_t c1, uint32_t c2, float t){

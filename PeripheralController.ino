@@ -1,6 +1,6 @@
 ///////////////////////////////////
 //      PeripheralController     //
-//         v 2.0.0-alpha         //
+//         v 2.1.0-alpha         //
 //                               //
 // by David Mahany, FRC Team 871 //
 //         git.io/fhxV9          //
@@ -9,7 +9,7 @@
 // PeripheralController.ino
 // Contains setup for the different peripheral components.
 
-#define VERSION "2.0.0-alpha"
+#define VERSION "2.1.0-alpha"
 
 
 #include "LEDStrip.h"
@@ -37,7 +37,6 @@ int fps = 0;
 bool readFirstByte = false;
 bool destForLED = false;
 
-
 #if USE_OCTOWS2811
 const int ledsPerStrip = 60;
 
@@ -59,7 +58,6 @@ LEDStrip lstr(astr);
 LEDStrip lstr2(astr);
 #endif
 
-
 void setup() {
   Serial.begin(9600);
   Serial.println("PeripheralController");
@@ -79,7 +77,6 @@ void setup() {
   
   ledController.init();
   ledController.addStrip(&lstr);
-  ledController.addStrip(&lstr2);
   Serial.println(ledController._numStrips);
   
 }

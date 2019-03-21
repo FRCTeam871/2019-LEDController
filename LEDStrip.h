@@ -9,6 +9,8 @@
 #include <Adafruit_NeoPixel.h>
 #endif
 
+#define RAINBOW_CONST UINT32_MAX
+
 class LEDStripMode;
 
 class LEDStrip {
@@ -45,6 +47,9 @@ class LEDStrip {
 
     uint32_t Color(int r, int g, int b);
     
+    uint32_t HueRotate(int r, int g, int b, int h);
+    uint32_t HueRotate(uint32_t c, int h);
+
     #if USE_OCTOWS2811
     OctoWS2811 _strip = OctoWS2811(0, NULL, NULL, WS2811_GRB);
     #else
