@@ -153,6 +153,15 @@ void LEDController::handleInput(char readString[]){
       setBrightness(j, params[0] / 100.0);
     }else if(strcmp(mode, "/RV") == 0){
       setReverse(j, params[0] == 1);
+    }else if(strcmp(mode, "/AS") == 0){      
+#if USE_OCTOWS2811
+    LEDStrip* lstp = new LEDStrip(astr, params[0], ledsPerStrip * params[1]);
+#else
+    Adafruit_NeoPixel* adastr = new Adafruit_NeoPixel(params[0], params[1], NEO_GRB + NEO_KHZ800);
+    adastr.begin();
+    LEDStrip* lstp = new LEDStrip(*adastr);
+#endif
+    addStrip(lstp);
     }else{
       setMode(j, getMode(mode));
       setParams(j, params);

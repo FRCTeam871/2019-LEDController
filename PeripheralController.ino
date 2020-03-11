@@ -1,6 +1,6 @@
 ///////////////////////////////////
 //      PeripheralController     //
-//         v 2.3.0-alpha         //
+//         v 3.0.0-alpha         //
 //                               //
 // by David Mahany, FRC Team 871 //
 //         git.io/fhxV9          //
@@ -9,7 +9,7 @@
 // PeripheralController.ino
 // Contains setup for the different peripheral components.
 
-#define VERSION "2.3.0-alpha"
+#define VERSION "3.0.0-alpha"
 
 
 #include "LEDStrip.h"
@@ -54,16 +54,10 @@ int drawingMemory[ledsPerStrip*6];
 const int config = WS2811_GRB | WS2811_800kHz;
 
 OctoWS2811 astr = OctoWS2811(ledsPerStrip, displayMemory, drawingMemory, config);
+astr.begin();
 
-
-LEDStrip lstr(astr, 15, ledsPerStrip * 0);
-LEDStrip lstr2(astr, 12, ledsPerStrip * 3);
 #else
-Adafruit_NeoPixel astr = Adafruit_NeoPixel(15, 6, NEO_GRB + NEO_KHZ800);
-Adafruit_NeoPixel astr = Adafruit_NeoPixel(12, 7, NEO_GRB + NEO_KHZ800);
 
-LEDStrip lstr(astr);
-LEDStrip lstr2(astr);
 #endif
 
 void setup() {
@@ -81,11 +75,7 @@ void setup() {
   astr = OctoWS2811(ledsPerStrip, displayMemory, drawingMemory, config);
   #endif
   
-  astr.begin();
-  
   ledController.init();
-  ledController.addStrip(&lstr);
-  ledController.addStrip(&lstr2);
   Serial.println(ledController._numStrips);
   
   audioSetup();
