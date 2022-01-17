@@ -60,7 +60,7 @@ void LEDStrip::setParams(int num, ...){
     }else{
       ar[i] = 0;
     }
-    //Serial.println(ar[i]);
+    //Serial1.println(ar[i]);
   }
   
   va_end (arguments);

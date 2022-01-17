@@ -59,7 +59,7 @@ void LEDStripModeBounce::render(LEDStrip* strip) {
   
   int pixels = strip->numPixels();
   
-  //Serial.println(bounce_ball[0][0]);
+  //Serial1.println(bounce_ball[0][0]);
   
   for(int i = 0; i < params[0]; i++){
     if(bounce_ball[i][0] <= 0) {
@@ -105,7 +105,7 @@ void LEDStripModeChase::render(LEDStrip* strip) {
   uint32_t c2 = params[4];
 
   for(int i = 0; i < strip->numPixels(); i++) {
-//    Serial.println(i);
+//    Serial1.println(i);
     if((millis() + (i*params[0])) % params[1] >= params[2]){
       strip->set(i, c1);
     }else{
@@ -165,7 +165,7 @@ uint8_t fire_heat[FIRE_SAMPLES];
 uint32_t fire_color[FIRE_SAMPLES];
 void LEDStripModeFire::render(LEDStrip* strip) {
 
-  //Serial.println("render fire");
+  //Serial1.println("render fire");
   if(millis() - fire_lastTick > 10) tickFire(55, 200);
   for(int i = 0; i < strip->numPixels(); i++){
     strip->set(i, strip->HueRotate(fire_color[(int)(i / (float)strip->numPixels() * FIRE_SAMPLES)], params[0]));
@@ -176,7 +176,7 @@ void LEDStripModeFire::tickFire(int Cooling, int Sparking) {
  
   fire_lastTick = millis();
  
-  //Serial.println("tickFire");
+  //Serial1.println("tickFire");
   int cooldown;
   
   // Step 1.  Cool down every cell a little
@@ -204,11 +204,11 @@ void LEDStripModeFire::tickFire(int Cooling, int Sparking) {
 
   // Step 4.  Convert heat to LED colors
   for( int j = 0; j < FIRE_SAMPLES; j++) {
-    //Serial.print((int)((fire_heat[j] / 255.0) * 9));
-    //Serial.print(" ");
+    //Serial1.print((int)((fire_heat[j] / 255.0) * 9));
+    //Serial1.print(" ");
     setPixelHeatColor(j, fire_heat[j] );
   }
-  //Serial.println();
+  //Serial1.println();
 }
 
 void LEDStripModeFire::setPixelHeatColor (int Pixel, uint8_t temperature) {
@@ -240,7 +240,7 @@ void LEDStripModeRainbowChase::render(LEDStrip* strip) {
     strip->set(i, strip->HueRotate(255, 0, 0, h));
     
   }
-  //Serial.println(h0);
+  //Serial1.println(h0);
 }
 
 long binary_lastTick = 0;

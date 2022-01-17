@@ -74,19 +74,24 @@ void audioSetup() {
   if (!(SD.begin(SDCARD_CS_PIN))) {
     // stop here, but print a message repetitively
     while (1) {
-      Serial.println("Unable to access the SD card");
+      Serial1.println("Unable to access the SD card");
       delay(500);
     }
   }
 
-  
-  root = SD.open("/");
-  printDirectory(root, 0);
+  printFiles();
   
 }
 
+void printFiles(){
+  root = SD.open("/");
+  Serial1.print("$$$");
+  printDirectory(root, 0);
+  Serial1.print("###");
+}
+
 void audioHandleInput(char readString[]){
-  Serial.println(readString);
+  Serial1.println(readString);
   
   char *p = readString;
   char *str;
@@ -95,17 +100,17 @@ void audioHandleInput(char readString[]){
   int numParams = acount_chars(readString, ';') - 1;
   char* params[numParams];
   while ((str = strtok_r(p, ";", &p)) != NULL){ // delimiter is the semicolon
-    //Serial.print(i);
-    //Serial.print(" ");
-    //Serial.println(str);
+    //Serial1.print(i);
+    //Serial1.print(" ");
+    //Serial1.println(str);
     if(i == 0){
       cmd = str;
     }
     if(i > 0) {
       params[i-1] = str;
-      Serial.print(i-1);
-      Serial.print(" = ");
-      Serial.println(params[i-1]);
+      Serial1.print(i-1);
+      Serial1.print(" = ");
+      Serial1.println(params[i-1]);
     }
     i++;
   }
@@ -127,8 +132,8 @@ int acount_chars(const char* string, char ch){
 
 void playFile(const char *filename)
 {
-  Serial.print("Playing file: ");
-  Serial.println(filename);
+  Serial1.print("Playing file: ");
+  Serial1.println(filename);
 
   // Start playing the file.  This sketch continues to
   // run while the file plays.
@@ -148,25 +153,26 @@ void playFile(const char *filename)
 }
 
 void printDirectory(File dir, int numTabs) {
+   
    while(true) {
      
      File entry =  dir.openNextFile();
      if (! entry) {
        // no more files
-       //Serial.println("**nomorefiles**");
+       //Serial1.println("**nomorefiles**");
        break;
      }
      for (uint8_t i=0; i<numTabs; i++) {
-       Serial.print('\t');
+//       Serial1.print('\t');
      }
-     Serial.print(entry.name());
      if (entry.isDirectory()) {
-       Serial.println("/");
+//       Serial1.println("/");
        printDirectory(entry, numTabs+1);
      } else {
+     Serial1.print(entry.name() + (String)"\n");
        // files have sizes, directories do not
-       Serial.print("\t\t");
-       Serial.println(entry.size(), DEC);
+//       Serial1.print("\t\t");
+//       Serial1.println(entry.size(), DEC);
      }
      entry.close();
    }

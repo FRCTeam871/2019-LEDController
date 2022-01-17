@@ -30,18 +30,18 @@ int count_chars(const char* string, char ch){
 
 LEDStripMode* getMode(char* key){
   for(int i = 0; i < sizeof(keys)/2; i++){
-    //Serial.println(keys[i]);
+    //Serial1.println(keys[i]);
     if(strcmp(keys[i], key) == 0) {
-      //Serial.print("Found key \"");
-      //Serial.print(key);
-      //Serial.print("\" at index ");
-      //Serial.println(i);
+      //Serial1.print("Found key \"");
+      //Serial1.print(key);
+      //Serial1.print("\" at index ");
+      //Serial1.println(i);
       return modes[i];
     }
   }
-  //Serial.print("No entry for key \"");
-  //Serial.print(key);
-  //Serial.println("\"");
+  //Serial1.print("No entry for key \"");
+  //Serial1.print(key);
+  //Serial1.println("\"");
   return modes[0];
 }
 
@@ -66,7 +66,7 @@ void LEDController::addStrip(LEDStrip* str){
 void LEDController::update(){
   for(int i = 0; i < _numStrips; i++){
       _strips[i]->update();
-//      Serial.println(i);
+//      Serial1.println(i);
   }
 }
 
@@ -85,7 +85,7 @@ void LEDController::setParams(int i, int num, ...){
     }else{
       ar[i] = 0;
     }
-    //Serial.println(ar[i]);
+    //Serial1.println(ar[i]);
   }
   
   va_end (arguments);
@@ -105,7 +105,7 @@ void LEDController::setReverse(int i, bool reverse){
 }
 
 void LEDController::handleInput(char readString[]){
-  Serial.println(readString);
+  Serial1.println(readString);
   
   char *p = readString;
   char *str;
@@ -115,22 +115,22 @@ void LEDController::handleInput(char readString[]){
   int numParams = count_chars(readString, ';') - 1;
   uint32_t params[numParams];
   while ((str = strtok_r(p, ";", &p)) != NULL){ // delimiter is the semicolon
-    //Serial.print(i);
-    //Serial.print(" ");
-    //Serial.println(str);
+    //Serial1.print(i);
+    //Serial1.print(" ");
+    //Serial1.println(str);
     if(i == 0){
       strip = strtol(str, NULL, 10);
       if(strcmp(str, "A") == 0) strip = -1;
-      Serial.print("Strip = ");
-      Serial.println(strip);
+      Serial1.print("Strip = ");
+      Serial1.println(strip);
     }
     if(i == 1) {
       mode = str;
-      Serial.print("Mode = \"");
-      Serial.print(mode);
-      Serial.println("\"");
+      Serial1.print("Mode = \"");
+      Serial1.print(mode);
+      Serial1.println("\"");
       if(numParams > 0){
-        Serial.println("Params:");
+        Serial1.println("Params:");
       }
     }
     if(i > 1) {
@@ -141,9 +141,9 @@ void LEDController::handleInput(char readString[]){
       }else{
         params[i-2] = strtoul(str, NULL, 10);
       }
-      Serial.print(i-2);
-      Serial.print(" = ");
-      Serial.println(params[i-2]);
+      Serial1.print(i-2);
+      Serial1.print(" = ");
+      Serial1.println(params[i-2]);
     }
     i++;
   }
