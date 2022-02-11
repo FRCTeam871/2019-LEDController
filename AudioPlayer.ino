@@ -79,15 +79,10 @@ void audioSetup() {
     }
   }
 
-  printFiles();
   
-}
-
-void printFiles(){
   root = SD.open("/");
-  Serial1.print("$$$");
   printDirectory(root, 0);
-  Serial1.print("###");
+  
 }
 
 void audioHandleInput(char readString[]){
@@ -153,7 +148,6 @@ void playFile(const char *filename)
 }
 
 void printDirectory(File dir, int numTabs) {
-   
    while(true) {
      
      File entry =  dir.openNextFile();
@@ -163,16 +157,16 @@ void printDirectory(File dir, int numTabs) {
        break;
      }
      for (uint8_t i=0; i<numTabs; i++) {
-//       Serial1.print('\t');
+       Serial1.print('\t');
      }
+     Serial1.print(entry.name());
      if (entry.isDirectory()) {
-//       Serial1.println("/");
+       Serial1.println("/");
        printDirectory(entry, numTabs+1);
      } else {
-     Serial1.print(entry.name() + (String)"\n");
        // files have sizes, directories do not
-//       Serial1.print("\t\t");
-//       Serial1.println(entry.size(), DEC);
+       Serial1.print("\t\t");
+       Serial1.println(entry.size(), DEC);
      }
      entry.close();
    }

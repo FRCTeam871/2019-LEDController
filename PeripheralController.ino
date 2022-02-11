@@ -125,14 +125,11 @@ void loop() {
         readFirstByte = false;
         break;
       }else if(!readFirstByte){
-//        Serial1.println(c);
+        Serial1.println(c);
         if(c == 'L') { // if the message starts with 'L', it will be destined for the LEDController
           destForLED = true;
         }else if(c == 'S') { // if the message starts with 'L', it will be destined for the LEDController
           destForAudio = true;
-        }else if(c == 'P'){
-          Serial1.println("yote");
-          printFiles();
         }
         readFirstByte = true;
       }else{
